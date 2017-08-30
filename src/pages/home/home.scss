@@ -1,3 +1,22 @@
 page-home {
 
+  .background {
+    background-image: url(../assets/bg_login.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  input::-webkit-input-placeholder {
+    color: #fff !important;
+  }
+  input::-moz-placeholder {
+    color: #fff !important;
+  }
+  input:-ms-input-placeholder {
+    color: #fff !important;
+  }
+  input:-moz-placeholder {
+    color: #fff !important;
+  }
+
 }
