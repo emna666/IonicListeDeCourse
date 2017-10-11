@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import {AlertController, LoadingController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, LoadingController, NavController} from 'ionic-angular';
 
 import {LoginService} from "../../services/login.service";
-//import {MapPage} from "../map/map";
-import {CategoriePage} from "../categorie/categorie";
+import {MapPage} from "../map/map";
 
 @Component({
   selector: 'page-home',
@@ -48,7 +47,7 @@ export class HomePage {
           this.showAlert(response.message)
         }else
         {
-          this.navCtrl.push(CategoriePage);
+          this.navCtrl.setRoot(MapPage);
           localStorage.setItem('token', response.data.session.token);
 
         }

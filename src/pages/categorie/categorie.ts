@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import {SupermarchesModel} from "../../models/supermarches.model";
 import {SupermarcheapiService} from "../../services/supermarcheapi.service";
 import {ProduitPage} from "../produit/produit";
@@ -11,7 +11,7 @@ import {ProduitPage} from "../produit/produit";
  * on Ionic pages and navigation.
  */
 
-@IonicPage()
+
 @Component({
   selector: 'page-categorie',
   templateUrl: 'categorie.html',
@@ -19,9 +19,13 @@ import {ProduitPage} from "../produit/produit";
 export class CategoriePage {
   supermarche: SupermarchesModel = new SupermarchesModel();
   token: string;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public supermarcheApiService: SupermarcheapiService) {
+  idSup: string;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public supermarcheApiService: SupermarcheapiService, private viewCtrl: ViewController) {
     this.token = localStorage.getItem("token");
     this.getSupermarches(null);
+  }
+  ionViewWillEnter() {
+    this.viewCtrl.showBackButton(false);
   }
 
   public getSupermarches(refresher){
@@ -30,13 +34,14 @@ export class CategoriePage {
         this.supermarche = newsFetched;
 
         (refresher) ? refresher.complete() : null;
+        this.idSup = newsFetched.data.id;
+        console.log(newsFetched.data);
       });
 
   }
-    PassProduit()
+    PassProduit(id_sup)
     {
       this.navCtrl.push(ProduitPage);
-      localStorage.setItem('idSupermarche', this.supermarche.id);
-      console.log(this.supermarche, this.supermarche.data.id);
+      localStorage.setItem('idSupermarche', id_sup);
     }
 }

@@ -10,3 +10,14 @@ export class  SupermarchesModel {
   photo: string;
   localite: LocaliteModel[];
 }
+
+export interface supMap {
+  id: string;
+  libelle: string;
+  longitude: number;
+  latitude:number;
+  adresse: string;
+  email: string;
+  photo: string;
+  localite: LocaliteModel[];
+}

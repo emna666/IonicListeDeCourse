@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import { Geolocation } from '@ionic-native/geolocation';
+import {Geolocation, GeolocationOptions, Geoposition,PositionError} from '@ionic-native/geolocation';
+import {GoogleMaps} from "@ionic-native/google-maps";
 
 /**
  * Generated class for the GeolocalisationPage page.
@@ -9,31 +10,20 @@ import { Geolocation } from '@ionic-native/geolocation';
  * on Ionic pages and navigation.
  */
 
-@IonicPage()
+
 @Component({
   selector: 'page-geolocalisation',
   templateUrl: 'geolocalisation.html',
 })
 export class GeolocalisationPage {
 
-  constructor(public navCtrl: NavController,private geolocation: Geolocation)
+  options: GeolocationOptions;
+  currentPos: Geoposition;
+  @ViewChild('map') mapElement : ElementRef;
+  map: any;
+  constructor(public navCtrl: NavController,private geolocation: Geolocation, private googleMaps: GoogleMaps)
   {
 
-    this.geolocation.getCurrentPosition().then((resp) => {
-      // resp.coords.latitude
-      // resp.coords.longitude
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
-    let watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
-      // data can be a set of coordinates, or an error (if an error occurred).
-      // data.coords.latitude
-      // data.coords.longitude
-    });
   }
-
-
 
 }

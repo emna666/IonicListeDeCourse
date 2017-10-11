@@ -1,0 +1,33 @@
+<ion-header >
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Ma liste de courses</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content >
+
+  <ion-list>
+    <ion-item *ngFor="let produit of listCourse">
+      <ion-avatar item-start>
+        <img src="http://amhsoft.net/htitey/ListeCourse/web/{{produit.photo}}">
+      </ion-avatar>
+      <h2>{{produit.libelle}}</h2>
+      <p>{{produit.description}}</p>
+      <p>{{produit.prix}} DT</p>
+      <button ion-button clear item-end (click)="DeleteProduit(produit.id)"><ion-icon name="trash"></ion-icon></button>
+    </ion-item>
+  </ion-list>
+
+  <ion-card *ngIf="lengthData == 0">
+    <ion-card-header>
+      Liste vide <ion-icon name="sad"></ion-icon>
+    </ion-card-header>
+    <ion-card-content>
+      Aucun produit dans votre liste
+    </ion-card-content>
+  </ion-card>
+</ion-content>

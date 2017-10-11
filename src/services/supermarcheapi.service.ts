@@ -15,15 +15,15 @@ import {tokenKey} from "@angular/core/src/view/util";
 @Injectable()
 export class SupermarcheapiService {
 
-  private baseUrl: string = 'http://localhost/listeCourse/web/app_dev.php/api/';
+  private baseUrl: string = 'http://amhsoft.net/htitey/ListeCourse/web/app_dev.php/api/';
 
   constructor(private http: Http) { }
 
-  public getSupermarches( token:string): Promise<SupermarchesModel> {
+  public getSupermarches( token:string): Promise<any> {
     const url = `${this.baseUrl}supermarches?_format=json&token=${token}`;
     console.log(url);
     return this.http.get(url).toPromise().then(
-      reponse => reponse.json() as SupermarchesModel
+      reponse => reponse.json()
 
     ).catch(error => console.log('une erreur est survenue'+ error))
   }

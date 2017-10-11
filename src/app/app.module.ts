@@ -3,19 +3,29 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-
-
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { SupermarcheapiService } from "../services/supermarcheapi.service";
 import { HttpModule } from "@angular/http";
 import { Geolocation } from "@ionic-native/geolocation";
-import {GeolocalisationPage} from "../pages/geolocalisation/geolocalisation";
-import {LoginService} from "../services/login.service";
-import {MapPage} from "../pages/map/map";
 import { GoogleMaps } from "@ionic-native/google-maps";
-import {CategoriePage} from "../pages/categorie/categorie";
+
+/**Declaration services**/
+import {LoginService} from "../services/login.service";
+import { SupermarcheapiService } from "../services/supermarcheapi.service";
+import {mesProduitsapiService} from "../services/mesproduitsapi.service";
+import { mesCouponsapiService } from "../services/mescouponsapi.service";
+import { couponsbyproductService } from "../services/couponsbyproduct.service";
+import {ProduitapiService} from "../services/produitapi.service";
+
+
+/**Declaration page**/
+import { HomePage } from '../pages/home/home';
+import {MapPage} from "../pages/map/map";
+import {GeolocalisationPage} from "../pages/geolocalisation/geolocalisation";
+import { CategoriePage } from "../pages/categorie/categorie";
 import {ProduitPage} from "../pages/produit/produit";
+import {MalistedecoursePage} from "../pages/malistedecourse/malistedecourse";
+import {MescouponsPage} from "../pages/mescoupons/mescoupons";
+import {CouponsproduitPage} from "../pages/couponsproduit/couponsproduit";
 
 
 
@@ -27,7 +37,10 @@ import {ProduitPage} from "../pages/produit/produit";
     GeolocalisationPage,
     MapPage,
     CategoriePage,
-    ProduitPage
+    MalistedecoursePage,
+    MescouponsPage,
+    ProduitPage,
+    CouponsproduitPage
   ],
   imports: [
     BrowserModule,
@@ -40,8 +53,10 @@ import {ProduitPage} from "../pages/produit/produit";
     HomePage,
     GeolocalisationPage,
     MapPage,
-    CategoriePage,
-    ProduitPage
+    MescouponsPage,
+    MalistedecoursePage,
+    ProduitPage,
+    CouponsproduitPage
   ],
   providers: [
     StatusBar,
@@ -49,8 +64,12 @@ import {ProduitPage} from "../pages/produit/produit";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SupermarcheapiService,
     LoginService,
+    ProduitapiService,
+    mesProduitsapiService,
+    mesCouponsapiService,
+    couponsbyproductService,
     GoogleMaps,
-    Geolocation,
+    Geolocation
   ]
 })
 export class AppModule {}

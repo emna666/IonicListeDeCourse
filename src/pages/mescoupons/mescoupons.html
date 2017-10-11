@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Mes coupons</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card *ngFor="let produit of listCoupons">
+    <img src="http://amhsoft.net/htitey/ListeCourse/web/{{produit.photo}}"/>
+    <ion-card-content>
+      <ion-card-title>
+        {{produit.libelle}}
+      </ion-card-title>
+      <button ion-button clear item-end (click)="DeleteCoupons(produit.id)"><ion-icon name="trash"></ion-icon></button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

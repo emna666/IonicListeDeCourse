@@ -1,37 +1,41 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Platform } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
+
+// Native components
 import { Geolocation } from '@ionic-native/geolocation';
-import {
-  GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker,
-  GoogleMapsAnimation
-} from '@ionic-native/google-maps';
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, GoogleMapsAnimation, MarkerOptions, Marker } from '@ionic-native/google-maps';
+
+// Mocks
+import * as TreeMapping from '../../models/tree.mapping';
 import {SupermarcheapiService} from "../../services/supermarcheapi.service";
 import {SupermarchesModel} from "../../models/supermarches.model";
-import {toArray} from "rxjs/operator/toArray";
+import {ProduitPage} from "../produit/produit";
 
 const MARKER_SIZE = 30;
 
-@IonicPage()
 @Component({
   selector: 'page-map',
-  templateUrl: 'map.html',
+  templateUrl: 'map.html'
 })
 export class MapPage {
-
-  supermarche: SupermarchesModel = new SupermarchesModel();
-  token: string;
-  listSupermarche: Array<any>;
   public map: GoogleMap;
-  constructor(public navCtrl: NavController, public platform: Platform, private geoLocation: Geolocation , private googleMaps: GoogleMaps, private supermarcheApiService: SupermarcheapiService) {
+  token: string;
+  supermarche:any;
+  constructor(public navCtrl: NavController, private geoLocation: Geolocation ,private googleMaps: GoogleMaps, public platform: Platform, private supermarcheApiService: SupermarcheapiService) {
     this.token = localStorage.getItem("token");
-    this.getSupermarches(null);
-    platform.ready().then(() =>
-    {
-      this.loadMap();
+
+    platform.ready().then(() => {
+      this.supermarcheApiService.getSupermarches(this.token).then(
+        response => {
+          this.supermarche = response.data;
+          console.log(this.supermarche);
+          this.loadMap(this.supermarche);
+        }
+      );
     });
   }
 
-  loadMap() {
+  loadMap( sup: SupermarchesModel[]) {
     // create a new map by passing HTMLElement
     let element: HTMLElement = document.getElementById('map');
 
@@ -41,7 +45,7 @@ export class MapPage {
     this.geoLocation.getCurrentPosition().then((resp) => {
 
       let userPosition: LatLng = new LatLng(resp.coords.latitude, resp.coords.longitude);
-
+        console.log(userPosition);
       let position: CameraPosition<any> = {
         target: userPosition,
         zoom: 15,
@@ -54,47 +58,49 @@ export class MapPage {
       console.log('Error getting location', error);
     });
 
+    // listen to MAP_READY event
+    // You must wait for this event to fire before adding something to the map or modifying it in anyway
     this.map.one(GoogleMapsEvent.MAP_READY).then(
       () => {
         console.log('Map is ready!');
         // Now you can add elements to the map like the marker
-
+        for(var tree of sup) {
+          this.addMarkerOnMap(tree);
+        }
       }
     );
-
-
   }
-  public getSupermarches(refresher){
-    this.supermarcheApiService.getSupermarches(this.token)
-      .then(newsFetched => {
-        this.supermarche = newsFetched;
 
-        (refresher) ? refresher.complete() : null;
-        console.log(this.supermarche);
-
-      });
-
-  }
-  private addMarkerOnMap(supermarche: SupermarchesModel) {
+  private addMarkerOnMap(tree: SupermarchesModel) {
     // create LatLng object
-    let markerposition: LatLng = new LatLng(supermarche.latitude ,supermarche.longitude);
+    let markerPosition: LatLng = new LatLng(tree.latitude,tree.longitude);
+
     let markerIcon = {
-      'url': supermarche.photo,
+      'url': 'http://amhsoft.net/htitey/ListeCourse/web/'+tree.photo,
       'size': {
         width: Math.round(MARKER_SIZE),
         height: Math.round(MARKER_SIZE)
       }
     }
+
     let markerOptions: MarkerOptions = {
-      position: markerposition,
-      title: supermarche.libelle,
-      snippet: 'Touch for more infos',
+      position: markerPosition,
+      title: tree.libelle,
+      snippet: 'Touch for more infos latitude:'+tree.latitude+' longitude: '+tree.longitude,
       animation: GoogleMapsAnimation.DROP,
       icon: markerIcon
     };
+
     this.map.addMarker(markerOptions)
       .then((marker: Marker) => {
         marker.showInfoWindow();
+        marker.addEventListener(GoogleMapsEvent.MARKER_CLICK)
+          .subscribe(e => {
+            console.log('you hit a pit marker');
+            this.navCtrl.push(ProduitPage);
+            localStorage.setItem('idSupermarche', tree.id);
+          });
+
       });
 
   }
